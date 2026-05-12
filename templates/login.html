@@ -5,23 +5,29 @@
 
     <title>Login</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
 
 </head>
 
 <body>
 
-<div class="box">
+<div class="login-box">
 
-    <h1>User Login</h1>
+    <h1>Flipkart Login</h1>
 
     <form method="POST">
 
-        <input type="text" name="username" placeholder="Username" required>
+        <input type="text"
+               name="mobile"
+               placeholder="Enter Mobile Number"
+               required>
 
-        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">
 
-        <button type="submit">Login</button>
+            Login
+
+        </button>
 
     </form>
 

@@ -1,10 +1,10 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request, session
 
 app = Flask(__name__)
 
-products = [
+app.secret_key = "flipkart_clone"
 
-    # ---------------- SHIRTS ----------------
+products = [
 
     {
         "id": 1,
@@ -38,8 +38,6 @@ products = [
         "image": "https://images.unsplash.com/photo-1512436991641-6745cdb1723f"
     },
 
-    # ---------------- PANTS ----------------
-
     {
         "id": 5,
         "name": "Jeans Pant",
@@ -71,8 +69,6 @@ products = [
         "category": "Pants",
         "image": "https://images.unsplash.com/photo-1514996937319-344454492b37"
     },
-
-    # ---------------- DHOTIS ----------------
 
     {
         "id": 9,
@@ -106,8 +102,6 @@ products = [
         "image": "https://images.unsplash.com/photo-1597983073493-88cd35cf93b0"
     },
 
-    # ---------------- SAREES ----------------
-
     {
         "id": 13,
         "name": "Black Saree",
@@ -139,8 +133,6 @@ products = [
         "category": "Sarees",
         "image": "https://images.unsplash.com/photo-1618354691438-25bc04584c23"
     },
-
-    # ---------------- HALF SAREES ----------------
 
     {
         "id": 17,
@@ -183,10 +175,37 @@ buy_items = []
 @app.route('/')
 def home():
 
+    user = session.get("mobile")
+
     return render_template(
         'index.html',
-        products=products
+        products=products,
+        user=user
     )
+
+# ---------------- LOGIN ----------------
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+
+    if request.method == 'POST':
+
+        mobile = request.form['mobile']
+
+        session['mobile'] = mobile
+
+        return redirect('/')
+
+    return render_template('login.html')
+
+# ---------------- LOGOUT ----------------
+
+@app.route('/logout')
+def logout():
+
+    session.pop('mobile', None)
+
+    return redirect('/')
 
 @app.route('/add-to-cart/<int:pid>')
 def add_to_cart(pid):

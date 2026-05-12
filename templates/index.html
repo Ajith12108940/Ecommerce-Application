@@ -23,6 +23,30 @@
 
     <div class="menu">
 
+        {% if user %}
+
+        <span>
+
+            {{user}}
+
+        </span>
+
+        <a href="/logout">
+
+            Logout
+
+        </a>
+
+        {% else %}
+
+        <a href="/login">
+
+            Login
+
+        </a>
+
+        {% endif %}
+
         <a href="/cart">Cart</a>
 
         <a href="/wishlist">Wishlist</a>

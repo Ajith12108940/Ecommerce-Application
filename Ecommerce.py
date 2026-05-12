@@ -1,411 +1,263 @@
-from flask import Flask, render_template, request, redirect, session
-import csv
-import random
-from textblob import TextBlob
+from flask import Flask, render_template, redirect
 
 app = Flask(__name__)
-app.secret_key = "ecommerce_secret"
 
-PRODUCT_FILE = "inventory.csv"
-USER_FILE = "users.csv"
-ORDER_FILE = "orders.csv"
-REVIEW_FILE = "reviews.csv"
+products = [
 
-class Product:
+    # ---------------- SHIRTS ----------------
 
-    def __init__(self, pid, name, price, stock, category):
+    {
+        "id": 1,
+        "name": "Black Shirt",
+        "price": 999,
+        "category": "Shirts",
+        "image": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf"
+    },
 
-        self.id = pid
-        self.name = name
-        self.price = price
-        self.stock = stock
-        self.category = category
+    {
+        "id": 2,
+        "name": "White Shirt",
+        "price": 1299,
+        "category": "Shirts",
+        "image": "https://images.unsplash.com/photo-1603252109303-2751441dd157"
+    },
 
-products = []
+    {
+        "id": 3,
+        "name": "Blue Shirt",
+        "price": 1499,
+        "category": "Shirts",
+        "image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab"
+    },
+
+    {
+        "id": 4,
+        "name": "Casual Shirt",
+        "price": 1199,
+        "category": "Shirts",
+        "image": "https://images.unsplash.com/photo-1512436991641-6745cdb1723f"
+    },
+
+    # ---------------- PANTS ----------------
+
+    {
+        "id": 5,
+        "name": "Jeans Pant",
+        "price": 1999,
+        "category": "Pants",
+        "image": "https://images.unsplash.com/photo-1542272604-787c3835535d"
+    },
+
+    {
+        "id": 6,
+        "name": "Formal Pant",
+        "price": 2499,
+        "category": "Pants",
+        "image": "https://images.unsplash.com/photo-1473966968600-fa801b869a1a"
+    },
+
+    {
+        "id": 7,
+        "name": "Black Pant",
+        "price": 1799,
+        "category": "Pants",
+        "image": "https://images.unsplash.com/photo-1506629905607-c6d7c3e0f94b"
+    },
+
+    {
+        "id": 8,
+        "name": "Cargo Pant",
+        "price": 2299,
+        "category": "Pants",
+        "image": "https://images.unsplash.com/photo-1514996937319-344454492b37"
+    },
+
+    # ---------------- DHOTIS ----------------
+
+    {
+        "id": 9,
+        "name": "Traditional Dhoti",
+        "price": 999,
+        "category": "Dhotis",
+        "image": "https://images.unsplash.com/photo-1618354691438-25bc04584c23"
+    },
+
+    {
+        "id": 10,
+        "name": "Wedding Dhoti",
+        "price": 1499,
+        "category": "Dhotis",
+        "image": "https://images.unsplash.com/photo-1622445275463-afa2ab738c34"
+    },
+
+    {
+        "id": 11,
+        "name": "Cotton Dhoti",
+        "price": 899,
+        "category": "Dhotis",
+        "image": "https://images.unsplash.com/photo-1610030469983-98e550d6193c"
+    },
+
+    {
+        "id": 12,
+        "name": "Silk Dhoti",
+        "price": 1999,
+        "category": "Dhotis",
+        "image": "https://images.unsplash.com/photo-1597983073493-88cd35cf93b0"
+    },
+
+    # ---------------- SAREES ----------------
+
+    {
+        "id": 13,
+        "name": "Black Saree",
+        "price": 3999,
+        "category": "Sarees",
+        "image": "https://images.unsplash.com/photo-1610030469983-98e550d6193c"
+    },
+
+    {
+        "id": 14,
+        "name": "Red Saree",
+        "price": 4999,
+        "category": "Sarees",
+        "image": "https://images.unsplash.com/photo-1597983073493-88cd35cf93b0"
+    },
+
+    {
+        "id": 15,
+        "name": "Wedding Saree",
+        "price": 6999,
+        "category": "Sarees",
+        "image": "https://images.unsplash.com/photo-1622445275463-afa2ab738c34"
+    },
+
+    {
+        "id": 16,
+        "name": "Silk Saree",
+        "price": 7999,
+        "category": "Sarees",
+        "image": "https://images.unsplash.com/photo-1618354691438-25bc04584c23"
+    },
+
+    # ---------------- HALF SAREES ----------------
+
+    {
+        "id": 17,
+        "name": "Pink Half Saree",
+        "price": 4999,
+        "category": "Half Sarees",
+        "image": "https://images.unsplash.com/photo-1597983073493-88cd35cf93b0"
+    },
+
+    {
+        "id": 18,
+        "name": "Blue Half Saree",
+        "price": 5299,
+        "category": "Half Sarees",
+        "image": "https://images.unsplash.com/photo-1610030469983-98e550d6193c"
+    },
+
+    {
+        "id": 19,
+        "name": "Traditional Half Saree",
+        "price": 6499,
+        "category": "Half Sarees",
+        "image": "https://images.unsplash.com/photo-1622445275463-afa2ab738c34"
+    },
+
+    {
+        "id": 20,
+        "name": "Designer Half Saree",
+        "price": 8999,
+        "category": "Half Sarees",
+        "image": "https://images.unsplash.com/photo-1618354691438-25bc04584c23"
+    }
+
+]
+
 cart = []
 wishlist = []
-
-# ---------------- LOAD PRODUCTS ----------------
-
-def load_products():
-
-    global products
-
-    products = []
-
-    try:
-
-        with open(PRODUCT_FILE) as f:
-
-            reader = csv.DictReader(f)
-
-            for row in reader:
-
-                products.append(
-
-                    Product(
-                        int(row['id']),
-                        row['name'],
-                        float(row['price']),
-                        int(row['stock']),
-                        row['category']
-                    )
-
-                )
-
-    except:
-        pass
-
-# ---------------- SAVE PRODUCTS ----------------
-
-def save_products():
-
-    with open(PRODUCT_FILE, "w", newline="") as f:
-
-        writer = csv.writer(f)
-
-        writer.writerow([
-            "id",
-            "name",
-            "price",
-            "stock",
-            "category"
-        ])
-
-        for p in products:
-
-            writer.writerow([
-                p.id,
-                p.name,
-                p.price,
-                p.stock,
-                p.category
-            ])
-
-# ---------------- HOME PAGE ----------------
+buy_items = []
 
 @app.route('/')
 def home():
 
-    load_products()
-
-    search = request.args.get('search', '')
-
-    filtered = []
-
-    for p in products:
-
-        if search.lower() in p.name.lower():
-
-            filtered.append(p)
-
-    if search == '':
-
-        filtered = products
-
-    recommendations = random.sample(
-        filtered,
-        min(3, len(filtered))
-    ) if filtered else []
-
     return render_template(
         'index.html',
-        products=filtered,
-        recommendations=recommendations,
-        cart_total=sum(item['price'] for item in cart)
+        products=products
     )
 
-# ---------------- REGISTER ----------------
-
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-
-    if request.method == 'POST':
-
-        username = request.form['username']
-        password = request.form['password']
-
-        with open(USER_FILE, 'a', newline='') as f:
-
-            writer = csv.writer(f)
-
-            writer.writerow([username, password])
-
-        return redirect('/login')
-
-    return render_template('register.html')
-
-# ---------------- LOGIN ----------------
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-
-    if request.method == 'POST':
-
-        username = request.form['username']
-        password = request.form['password']
-
-        try:
-
-            with open(USER_FILE) as f:
-
-                reader = csv.reader(f)
-
-                for row in reader:
-
-                    if row[0] == username and row[1] == password:
-
-                        session['user'] = username
-
-                        return redirect('/')
-
-        except:
-            pass
-
-    return render_template('login.html')
-
-# ---------------- LOGOUT ----------------
-
-@app.route('/logout')
-def logout():
-
-    session.pop('user', None)
-
-    return redirect('/')
-
-# ---------------- ADD PRODUCT ----------------
-
-@app.route('/add', methods=['POST'])
-def add_product():
-
-    pid = int(request.form['id'])
-    name = request.form['name']
-    price = float(request.form['price'])
-    stock = int(request.form['stock'])
-    category = request.form['category']
-
-    products.append(
-        Product(
-            pid,
-            name,
-            price,
-            stock,
-            category
-        )
-    )
-
-    save_products()
-
-    return redirect('/')
-
-# ---------------- ADD TO CART ----------------
-
-@app.route('/cart/<int:pid>')
+@app.route('/add-to-cart/<int:pid>')
 def add_to_cart(pid):
 
     for p in products:
 
-        if p.id == pid and p.stock > 0:
+        if p["id"] == pid:
 
-            cart.append({
+            cart.append(p)
 
-                'name': p.name,
-                'price': p.price
-
-            })
-
-            p.stock -= 1
-
-            save_products()
-
-    return redirect('/')
-
-# ---------------- VIEW CART ----------------
-
-@app.route('/view-cart')
-def view_cart():
-
-    total = sum(item['price'] for item in cart)
-
-    return render_template(
-        'cart.html',
-        cart=cart,
-        total=total
-    )
-
-# ---------------- WISHLIST ----------------
+    return redirect('/cart')
 
 @app.route('/wishlist/<int:pid>')
 def add_to_wishlist(pid):
 
     for p in products:
 
-        if p.id == pid:
+        if p["id"] == pid:
 
             wishlist.append(p)
 
-    return redirect('/')
+    return redirect('/wishlist')
 
-# ---------------- PLACE ORDER ----------------
+@app.route('/buy/<int:pid>')
+def buy_product(pid):
 
-@app.route('/place-order')
-def place_order():
+    for p in products:
 
-    total = sum(item['price'] for item in cart)
+        if p["id"] == pid:
 
-    with open(ORDER_FILE, 'a', newline='') as f:
+            buy_items.append(p)
 
-        writer = csv.writer(f)
+    return redirect('/buy-page')
 
-        writer.writerow([
-            session.get('user', 'Guest'),
-            total
-        ])
+@app.route('/cart')
+def cart_page():
 
-    cart.clear()
-
-    return "Order Placed Successfully"
-
-# ---------------- ORDERS ----------------
-
-@app.route('/orders')
-def orders():
-
-    order_list = []
-
-    try:
-
-        with open(ORDER_FILE) as f:
-
-            reader = csv.reader(f)
-
-            for row in reader:
-
-                order_list.append({
-
-                    'user': row[0],
-                    'total': row[1]
-
-                })
-
-    except:
-        pass
+    total = sum(item["price"] for item in cart)
 
     return render_template(
-        'orders.html',
-        orders=order_list
+        'cart.html',
+        items=cart,
+        total=total,
+        title="Cart"
     )
 
-# ---------------- PRODUCT REVIEW ----------------
+@app.route('/wishlist')
+def wishlist_page():
 
-@app.route('/review/<int:pid>', methods=['POST'])
-def review(pid):
-
-    text = request.form['review']
-
-    sentiment = TextBlob(text).sentiment.polarity
-
-    mood = "Positive"
-
-    if sentiment < 0:
-
-        mood = "Negative"
-
-    with open(REVIEW_FILE, 'a', newline='') as f:
-
-        writer = csv.writer(f)
-
-        writer.writerow([
-            pid,
-            text,
-            mood
-        ])
-
-    return redirect('/')
-
-# ---------------- AI CHATBOT ----------------
-
-@app.route('/chatbot', methods=['GET', 'POST'])
-def chatbot():
-
-    reply = ""
-
-    if request.method == 'POST':
-
-        message = request.form['message'].lower()
-
-        if "hello" in message:
-
-            reply = "Hello User! Welcome to AI Ecommerce Store."
-
-        elif "laptop" in message:
-
-            reply = "We have gaming laptops and office laptops."
-
-        elif "mobile" in message:
-
-            reply = "Latest mobiles are available in Electronics."
-
-        elif "price" in message:
-
-            reply = "All prices are displayed on homepage."
-
-        elif "discount" in message:
-
-            reply = "Current discount is 20% on Electronics."
-
-        elif "order" in message:
-
-            reply = "Go to cart and click place order."
-
-        elif "payment" in message:
-
-            reply = "Payment options: UPI, Card, Net Banking."
-
-        elif "delivery" in message:
-
-            reply = "Delivery usually takes 3 to 5 days."
-
-        elif "refund" in message:
-
-            reply = "Refund available within 7 days."
-
-        elif "bye" in message:
-
-            reply = "Thank you for visiting our store."
-
-        else:
-
-            reply = "AI Bot could not understand your question."
+    total = sum(item["price"] for item in wishlist)
 
     return render_template(
-        'chatbot.html',
-        reply=reply
+        'cart.html',
+        items=wishlist,
+        total=total,
+        title="Wishlist"
     )
 
-# ---------------- ADMIN DASHBOARD ----------------
+@app.route('/buy-page')
+def buy_page():
 
-@app.route('/admin')
-def admin():
-
-    total_products = len(products)
-
-    total_cart = len(cart)
-
-    total_stock = sum(p.stock for p in products)
+    total = sum(item["price"] for item in buy_items)
 
     return render_template(
-        'admin.html',
-        total_products=total_products,
-        total_cart=total_cart,
-        total_stock=total_stock
+        'cart.html',
+        items=buy_items,
+        total=total,
+        title="Buy Products"
     )
 
-# ---------------- RUN APPLICATION ----------------
-
-if __name__ == '__main__':
-
-    load_products()
+if __name__ == "__main__":
 
     app.run(
         debug=True,

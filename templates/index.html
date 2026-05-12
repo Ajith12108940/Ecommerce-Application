@@ -3,7 +3,7 @@
 
 <head>
 
-    <title>AI E-Commerce Website</title>
+    <title>Flipkart Clone</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
@@ -12,181 +12,84 @@
 
 <body>
 
-<h1>AI E-Commerce Website</h1>
+<div class="navbar">
 
-<div class="box">
+    <div class="logo">
+        Flipkart
+    </div>
 
-    <a href="/login">Login</a> |
-    <a href="/register">Register</a> |
-    <a href="/view-cart">Cart</a> |
-    <a href="/orders">Orders</a> |
-    <a href="/admin">Admin</a> |
-    <a href="/chatbot">AI Chatbot</a> |
-    <a href="/logout">Logout</a>
+    <input type="text"
+           placeholder="Search for Products, Brands and More">
 
-</div>
+    <div class="menu">
 
-<div class="box">
+        <a href="/cart">Cart</a>
 
-    <h2>Search Product</h2>
+        <a href="/wishlist">Wishlist</a>
 
-    <form method="GET">
+        <a href="/buy-page">Buy</a>
 
-        <input type="text"
-               name="search"
-               placeholder="Search Products">
-
-        <button type="submit">Search</button>
-
-    </form>
+    </div>
 
 </div>
 
-<div class="box">
+<h1 class="title">
 
-    <h2>Add Product</h2>
+    Fashion Store
 
-    <form method="POST" action="/add">
+</h1>
 
-        <input type="number"
-               name="id"
-               placeholder="ID"
-               required>
+<div class="products">
 
-        <input type="text"
-               name="name"
-               placeholder="Name"
-               required>
+{% for p in products %}
 
-        <input type="number"
-               step="0.01"
-               name="price"
-               placeholder="Price"
-               required>
+<div class="card">
 
-        <input type="number"
-               name="stock"
-               placeholder="Stock"
-               required>
+    <img src="{{p.image}}">
 
-        <input type="text"
-               name="category"
-               placeholder="Category"
-               required>
+    <h2>{{p.name}}</h2>
 
-        <button type="submit">
-            Add Product
-        </button>
+    <h3>₹{{p.price}}</h3>
 
-    </form>
+    <p>{{p.category}}</p>
 
-</div>
+    <div class="buttons">
 
-<div class="box">
+        <a href="/add-to-cart/{{p.id}}">
 
-    <h2>Products</h2>
+            <button class="cart">
 
-    <table>
+                Add to Cart
 
-        <tr>
+            </button>
 
-            <th>ID</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th>Category</th>
-            <th>Cart</th>
-            <th>Wishlist</th>
-            <th>Review</th>
+        </a>
 
-        </tr>
+        <a href="/wishlist/{{p.id}}">
 
-        {% for p in products %}
+            <button class="wish">
 
-        <tr>
+                Wishlist
 
-            <td>{{p.id}}</td>
+            </button>
 
-            <td>{{p.name}}</td>
+        </a>
 
-            <td>₹{{p.price}}</td>
+        <a href="/buy/{{p.id}}">
 
-            <td>{{p.stock}}</td>
+            <button class="buy">
 
-            <td>{{p.category}}</td>
+                Buy
 
-            <td>
+            </button>
 
-                <a href="/cart/{{p.id}}">
-                    Add to Cart
-                </a>
+        </a>
 
-            </td>
-
-            <td>
-
-                <a href="/wishlist/{{p.id}}">
-                    Wishlist
-                </a>
-
-            </td>
-
-            <td>
-
-                <form method="POST"
-                      action="/review/{{p.id}}">
-
-                    <input type="text"
-                           name="review"
-                           placeholder="Review">
-
-                    <button type="submit">
-                        Submit
-                    </button>
-
-                </form>
-
-            </td>
-
-        </tr>
-
-        {% endfor %}
-
-    </table>
+    </div>
 
 </div>
 
-<div class="box">
-
-    <h2>AI Recommendations</h2>
-
-    <ul>
-
-        {% for r in recommendations %}
-
-        <li>
-
-            {{r.name}} - ₹{{r.price}}
-
-        </li>
-
-        {% endfor %}
-
-    </ul>
-
-</div>
-
-<div class="box">
-
-    <h2>Total Cart Bill: ₹{{cart_total}}</h2>
-
-    <a href="/place-order">
-
-        <button>
-            Place Order
-        </button>
-
-    </a>
+{% endfor %}
 
 </div>
 

@@ -1,52 +1,123 @@
 body{
+
+    margin:0;
     font-family:Arial;
-    background:#f2f2f2;
-    padding:20px;
+    background:#f1f3f6;
+
 }
 
-h1{
-    text-align:center;
-    color:darkblue;
-}
+.navbar{
 
-.box{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
     background:white;
-    padding:20px;
-    margin:20px;
+    padding:15px;
+
+}
+
+.logo{
+
+    font-size:35px;
+    color:#2874f0;
+    font-weight:bold;
+
+}
+
+.navbar input{
+
+    width:50%;
+    padding:12px;
+    border:2px solid #2874f0;
     border-radius:10px;
+
 }
 
-table{
-    width:100%;
-    border-collapse:collapse;
+.menu a{
+
+    margin:15px;
+    text-decoration:none;
+    color:black;
+    font-size:20px;
+
 }
 
-th,td{
-    border:1px solid gray;
-    padding:10px;
+.title{
+
     text-align:center;
+    margin-top:30px;
+    color:#2874f0;
+
 }
 
-input{
-    padding:10px;
-    margin:5px;
+.products{
+
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+
+}
+
+.card{
+
+    background:white;
+    width:300px;
+    margin:20px;
+    padding:20px;
+    border-radius:10px;
+    text-align:center;
+    box-shadow:0 0 10px lightgray;
+
+}
+
+.card img{
+
+    width:100%;
+    height:300px;
+    object-fit:cover;
+    border-radius:10px;
+
+}
+
+.buttons{
+
+    display:flex;
+    justify-content:space-between;
+    margin-top:15px;
+
 }
 
 button{
-    padding:10px;
-    background:green;
-    color:white;
+
     border:none;
+    padding:10px;
     border-radius:5px;
+    color:white;
     cursor:pointer;
+
 }
 
-button:hover{
-    background:darkgreen;
+.cart{
+
+    background:#ff9f00;
+
 }
 
-a{
-    text-decoration:none;
-    color:blue;
-    font-weight:bold;
+.wish{
+
+    background:#2874f0;
+
+}
+
+.buy{
+
+    background:#fb641b;
+
+}
+
+.total{
+
+    text-align:center;
+    margin-bottom:50px;
+
 }

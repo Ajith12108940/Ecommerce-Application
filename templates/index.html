@@ -3,86 +3,192 @@
 
 <head>
 
-    <title>E-Commerce Website</title>
+    <title>AI E-Commerce Website</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
 
 </head>
 
 <body>
 
-    <h1>My E-Commerce Website</h1>
+<h1>AI E-Commerce Website</h1>
 
-    <div class="box">
+<div class="box">
 
-        <h2>Add Product</h2>
+    <a href="/login">Login</a> |
+    <a href="/register">Register</a> |
+    <a href="/view-cart">Cart</a> |
+    <a href="/orders">Orders</a> |
+    <a href="/admin">Admin</a> |
+    <a href="/chatbot">AI Chatbot</a> |
+    <a href="/logout">Logout</a>
 
-        <form method="POST" action="/add">
+</div>
 
-            <input type="number" name="id" placeholder="ID" required>
+<div class="box">
 
-            <input type="text" name="name" placeholder="Name" required>
+    <h2>Search Product</h2>
 
-            <input type="number" step="0.01" name="price" placeholder="Price" required>
+    <form method="GET">
 
-            <input type="number" name="stock" placeholder="Stock" required>
+        <input type="text"
+               name="search"
+               placeholder="Search Products">
 
-            <button type="submit">Add Product</button>
+        <button type="submit">Search</button>
 
-        </form>
+    </form>
 
-    </div>
+</div>
 
-    <div class="box">
+<div class="box">
 
-        <h2>Products</h2>
+    <h2>Add Product</h2>
 
-        <table>
+    <form method="POST" action="/add">
 
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Stock</th>
-                <th>Buy</th>
-            </tr>
+        <input type="number"
+               name="id"
+               placeholder="ID"
+               required>
 
-            {% for p in inventory %}
+        <input type="text"
+               name="name"
+               placeholder="Name"
+               required>
 
-            <tr>
+        <input type="number"
+               step="0.01"
+               name="price"
+               placeholder="Price"
+               required>
 
-                <td>{{p.id}}</td>
-                <td>{{p.name}}</td>
-                <td>₹{{p.price}}</td>
-                <td>{{p.stock}}</td>
+        <input type="number"
+               name="stock"
+               placeholder="Stock"
+               required>
 
-                <td>
+        <input type="text"
+               name="category"
+               placeholder="Category"
+               required>
 
-                    <form method="POST" action="/buy">
+        <button type="submit">
+            Add Product
+        </button>
 
-                        <input type="hidden" name="name" value="{{p.name}}">
+    </form>
 
-                        <input type="number" name="qty" placeholder="Qty" required>
+</div>
 
-                        <button type="submit">Buy</button>
+<div class="box">
 
-                    </form>
+    <h2>Products</h2>
 
-                </td>
+    <table>
 
-            </tr>
+        <tr>
 
-            {% endfor %}
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Category</th>
+            <th>Cart</th>
+            <th>Wishlist</th>
+            <th>Review</th>
 
-        </table>
+        </tr>
 
-    </div>
+        {% for p in products %}
 
-    <div class="box">
+        <tr>
 
-        <h2>Total Bill: ₹{{total}}</h2>
+            <td>{{p.id}}</td>
 
-    </div>
+            <td>{{p.name}}</td>
+
+            <td>₹{{p.price}}</td>
+
+            <td>{{p.stock}}</td>
+
+            <td>{{p.category}}</td>
+
+            <td>
+
+                <a href="/cart/{{p.id}}">
+                    Add to Cart
+                </a>
+
+            </td>
+
+            <td>
+
+                <a href="/wishlist/{{p.id}}">
+                    Wishlist
+                </a>
+
+            </td>
+
+            <td>
+
+                <form method="POST"
+                      action="/review/{{p.id}}">
+
+                    <input type="text"
+                           name="review"
+                           placeholder="Review">
+
+                    <button type="submit">
+                        Submit
+                    </button>
+
+                </form>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+<div class="box">
+
+    <h2>AI Recommendations</h2>
+
+    <ul>
+
+        {% for r in recommendations %}
+
+        <li>
+
+            {{r.name}} - ₹{{r.price}}
+
+        </li>
+
+        {% endfor %}
+
+    </ul>
+
+</div>
+
+<div class="box">
+
+    <h2>Total Cart Bill: ₹{{cart_total}}</h2>
+
+    <a href="/place-order">
+
+        <button>
+            Place Order
+        </button>
+
+    </a>
+
+</div>
 
 </body>
 

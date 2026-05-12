@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template_string
+from flask import Flask, render_template, request, redirect
 import csv
 
 app = Flask(__name__)
@@ -20,8 +20,6 @@ class Cart:
         if p.stock >= q:
             p.stock -= q
             self.items.append((p.name, p.price, q))
-            return "Added to Cart"
-        return "Stock not enough"
 
     def bill(self):
         return sum(price * q for _, price, q in self.items)
@@ -59,145 +57,12 @@ def load():
 
 inventory = load()
 
-HTML = '''
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>E-Commerce Store</title>
-
-    <style>
-
-        body{
-            font-family: Arial;
-            background:#f2f2f2;
-            padding:20px;
-        }
-
-        h1{
-            text-align:center;
-            color:darkblue;
-        }
-
-        .box{
-            background:white;
-            padding:20px;
-            margin:20px;
-            border-radius:10px;
-        }
-
-        table{
-            width:100%;
-            border-collapse:collapse;
-        }
-
-        th,td{
-            border:1px solid gray;
-            padding:10px;
-            text-align:center;
-        }
-
-        input{
-            padding:8px;
-            margin:5px;
-        }
-
-        button{
-            padding:10px;
-            background:green;
-            color:white;
-            border:none;
-            border-radius:5px;
-        }
-
-    </style>
-
-</head>
-
-<body>
-
-<h1>My E-Commerce Website</h1>
-
-<div class="box">
-
-<h2>Add Product</h2>
-
-<form method="POST" action="/add">
-
-<input type="number" name="id" placeholder="ID" required>
-<input type="text" name="name" placeholder="Name" required>
-<input type="number" step="0.01" name="price" placeholder="Price" required>
-<input type="number" name="stock" placeholder="Stock" required>
-
-<button type="submit">Add Product</button>
-
-</form>
-
-</div>
-
-<div class="box">
-
-<h2>Products</h2>
-
-<table>
-
-<tr>
-<th>ID</th>
-<th>Name</th>
-<th>Price</th>
-<th>Stock</th>
-<th>Buy</th>
-</tr>
-
-{% for p in inventory %}
-
-<tr>
-
-<td>{{p.id}}</td>
-<td>{{p.name}}</td>
-<td>₹{{p.price}}</td>
-<td>{{p.stock}}</td>
-
-<td>
-
-<form method="POST" action="/buy">
-
-<input type="hidden" name="name" value="{{p.name}}">
-
-<input type="number" name="qty" placeholder="Qty" required>
-
-<button type="submit">Buy</button>
-
-</form>
-
-</td>
-
-</tr>
-
-{% endfor %}
-
-</table>
-
-</div>
-
-<div class="box">
-
-<h2>Cart Total: ₹{{total}}</h2>
-
-</div>
-
-</body>
-</html>
-
-'''
-
 @app.route("/")
 def home():
-    total = cart.bill()
-    return render_template_string(
-        HTML,
+    return render_template(
+        "index.html",
         inventory=inventory,
-        total=total
+        total=cart.bill()
     )
 
 @app.route("/add", methods=["POST"])

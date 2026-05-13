@@ -2,120 +2,213 @@
 <html>
 
 <head>
+    <title>Ecommerce</title>
 
-    <title>Flipkart Clone</title>
+    <style>
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+        body{
+            margin:0;
+            font-family:Arial;
+            background:#f1f3f6;
+        }
+
+        .navbar{
+            background:white;
+            padding:15px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+        }
+
+        .logo{
+            font-size:40px;
+            font-weight:bold;
+            color:#2874f0;
+        }
+
+        .search-bar{
+            width:55%;
+        }
+
+        .search-bar input{
+            width:75%;
+            padding:10px;
+            font-size:16px;
+            border:2px solid #2874f0;
+            border-radius:8px;
+        }
+
+        .search-bar button{
+            padding:10px 15px;
+            background:#2874f0;
+            color:white;
+            border:none;
+            border-radius:8px;
+        }
+
+        .menu a{
+            margin-left:20px;
+            text-decoration:none;
+            color:black;
+            font-size:18px;
+        }
+
+        .categories{
+            text-align:center;
+            margin-top:25px;
+        }
+
+        .categories a{
+            margin:10px;
+            text-decoration:none;
+            font-size:22px;
+            color:#2874f0;
+            font-weight:bold;
+        }
+
+        .products{
+            display:grid;
+            grid-template-columns:repeat(4,1fr);
+            gap:20px;
+            padding:25px;
+        }
+
+        .card{
+            background:white;
+            padding:15px;
+            border-radius:12px;
+            text-align:center;
+            box-shadow:0px 0px 8px lightgray;
+        }
+
+        .card img{
+            width:100%;
+            height:250px;
+            object-fit:cover;
+            border-radius:10px;
+        }
+
+        .card h1{
+            font-size:22px;
+        }
+
+        .card h2{
+            font-size:20px;
+            color:green;
+        }
+
+        .buttons{
+            margin-top:15px;
+        }
+
+        .buttons a{
+            text-decoration:none;
+            padding:8px 12px;
+            color:white;
+            border-radius:6px;
+            margin:4px;
+            font-size:14px;
+        }
+
+        .cart{
+            background:orange;
+        }
+
+        .wish{
+            background:#2874f0;
+        }
+
+        .buy{
+            background:#fb641b;
+        }
+
+    </style>
 
 </head>
 
 <body>
 
-<div class="navbar">
+    <div class="navbar">
 
-    <div class="logo">
-        Flipkart
-    </div>
+        <div class="logo">
+            Ecommerce
+        </div>
 
-    <input type="text"
-           placeholder="Search for Products, Brands and More">
+        <div class="search-bar">
 
-    <div class="menu">
+            <form action="/" method="GET">
 
-        {% if user %}
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Search Products"
+                >
 
-        <span>
+                <button type="submit">
+                    Search
+                </button>
 
-            {{user}}
+            </form>
 
-        </span>
+        </div>
 
-        <a href="/logout">
-
-            Logout
-
-        </a>
-
-        {% else %}
-
-        <a href="/login">
-
-            Login
-
-        </a>
-
-        {% endif %}
-
-        <a href="/cart">Cart</a>
-
-        <a href="/wishlist">Wishlist</a>
-
-        <a href="/buy-page">Buy</a>
+        <div class="menu">
+            <a href="/">Home</a>
+        </div>
 
     </div>
 
-</div>
 
-<h1 class="title">
+    <div class="categories">
 
-    Fashion Store
+        <a href="/category/Shirts">Shirts</a>
 
-</h1>
+        <a href="/category/Pants">Pants</a>
 
-<div class="products">
+        <a href="/category/Dhotis">Dhotis</a>
 
-{% for p in products %}
+        <a href="/category/Sarees">Sarees</a>
 
-<div class="card">
-
-    <img src="{{p.image}}">
-
-    <h2>{{p.name}}</h2>
-
-    <h3>₹{{p.price}}</h3>
-
-    <p>{{p.category}}</p>
-
-    <div class="buttons">
-
-        <a href="/add-to-cart/{{p.id}}">
-
-            <button class="cart">
-
-                Add to Cart
-
-            </button>
-
-        </a>
-
-        <a href="/wishlist/{{p.id}}">
-
-            <button class="wish">
-
-                Wishlist
-
-            </button>
-
-        </a>
-
-        <a href="/buy/{{p.id}}">
-
-            <button class="buy">
-
-                Buy
-
-            </button>
-
-        </a>
+        <a href="/category/Half Sarees">Half Sarees</a>
 
     </div>
 
-</div>
 
-{% endfor %}
+    <div class="products">
 
-</div>
+        {% for product in products %}
+
+        <div class="card">
+
+            <img src="{{ product.image }}">
+
+            <h1>{{ product.name }}</h1>
+
+            <h2>₹{{ product.price }}</h2>
+
+            <p>{{ product.category }}</p>
+
+            <div class="buttons">
+
+                <a class="cart" href="/cart/{{ product.id }}">
+                    Cart
+                </a>
+
+                <a class="wish" href="/wishlist/{{ product.id }}">
+                    Wishlist
+                </a>
+
+                <a class="buy" href="/buy/{{ product.id }}">
+                    Buy
+                </a>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
 
 </body>
 

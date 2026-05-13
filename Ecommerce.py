@@ -2,168 +2,181 @@ from flask import Flask, render_template, redirect, request, session
 
 app = Flask(__name__)
 
-app.secret_key = "flipkart_clone"
+app.secret_key = "flipkart"
 
 products = [
 
+    # SHIRTS
     {
         "id": 1,
-        "name": "Black Shirt",
-        "price": 999,
+        "name": "nylon Shirt",
+        "price": 386,
         "category": "Shirts",
-        "image": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf"
+        "image": "/static/images/shirts/shirt1.webp"
     },
 
     {
         "id": 2,
-        "name": "White Shirt",
-        "price": 1299,
+        "name": "check Shirt",
+        "price": 261,
         "category": "Shirts",
-        "image": "https://images.unsplash.com/photo-1603252109303-2751441dd157"
+        "image": "/static/images/shirts/shirt2.webp"
     },
 
     {
         "id": 3,
-        "name": "Blue Shirt",
-        "price": 1499,
+        "name": "printed Shirt",
+        "price": 469,
         "category": "Shirts",
-        "image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab"
+        "image": "/static/images/shirts/shirt3.webp"
     },
 
     {
         "id": 4,
-        "name": "Casual Shirt",
-        "price": 1199,
+        "name": "Check Shirt",
+        "price": 437,
         "category": "Shirts",
-        "image": "https://images.unsplash.com/photo-1512436991641-6745cdb1723f"
+        "image": "/static/images/shirts/shirt4.webp"
     },
 
+
+
+    # PANTS
     {
         "id": 5,
-        "name": "Jeans Pant",
-        "price": 1999,
+        "name": "Black Pant",
+        "price": 317,
         "category": "Pants",
-        "image": "https://images.unsplash.com/photo-1542272604-787c3835535d"
+        "image": "/static/images/pants/pant1.webp"
     },
 
     {
         "id": 6,
-        "name": "Formal Pant",
-        "price": 2499,
+        "name": "Printed Pant",
+        "price": 442,
         "category": "Pants",
-        "image": "https://images.unsplash.com/photo-1473966968600-fa801b869a1a"
+        "image": "/static/images/pants/pant2.webp"
     },
 
     {
         "id": 7,
-        "name": "Black Pant",
-        "price": 1799,
+        "name": "Grey Pant",
+        "price": 458,
         "category": "Pants",
-        "image": "https://images.unsplash.com/photo-1506629905607-c6d7c3e0f94b"
+        "image": "/static/images/pants/pant3.webp"
     },
 
     {
         "id": 8,
         "name": "Cargo Pant",
-        "price": 2299,
+        "price": 750,
         "category": "Pants",
-        "image": "https://images.unsplash.com/photo-1514996937319-344454492b37"
+        "image": "/static/images/pants/pant4.webp"
     },
 
+
+
+    # DHOTIS
     {
         "id": 9,
-        "name": "Traditional Dhoti",
-        "price": 999,
+        "name": "White Dhoti",
+        "price": 352,
         "category": "Dhotis",
-        "image": "https://images.unsplash.com/photo-1618354691438-25bc04584c23"
+        "image": "/static/images/dhotis/dhoti1.webp"
     },
 
     {
         "id": 10,
-        "name": "Wedding Dhoti",
-        "price": 1499,
+        "name": "Traditional Dhoti",
+        "price": 283,
         "category": "Dhotis",
-        "image": "https://images.unsplash.com/photo-1622445275463-afa2ab738c34"
+        "image": "/static/images/dhotis/dhoti2.webp"
     },
 
     {
         "id": 11,
         "name": "Cotton Dhoti",
-        "price": 899,
+        "price": 385,
         "category": "Dhotis",
-        "image": "https://images.unsplash.com/photo-1610030469983-98e550d6193c"
+        "image": "/static/images/dhotis/dhoti3.webp"
     },
 
     {
         "id": 12,
-        "name": "Silk Dhoti",
-        "price": 1999,
+        "name": " Dhoti",
+        "price": 389,
         "category": "Dhotis",
-        "image": "https://images.unsplash.com/photo-1597983073493-88cd35cf93b0"
+        "image": "/static/images/dhotis/dhoti4.webp"
     },
 
+
+
+    # SAREES
     {
         "id": 13,
-        "name": "Black Saree",
-        "price": 3999,
+        "name": "zenz Saree",
+        "price": 486,
         "category": "Sarees",
-        "image": "https://images.unsplash.com/photo-1610030469983-98e550d6193c"
+        "image": "/static/images/sarees/saree1.webp"
     },
 
     {
         "id": 14,
-        "name": "Red Saree",
-        "price": 4999,
+        "name": " trendy Saree",
+        "price": 283,
         "category": "Sarees",
-        "image": "https://images.unsplash.com/photo-1597983073493-88cd35cf93b0"
+        "image": "/static/images/sarees/saree2.webp"
     },
 
     {
         "id": 15,
-        "name": "Wedding Saree",
-        "price": 6999,
+        "name": " printed Saree",
+        "price": 499,
         "category": "Sarees",
-        "image": "https://images.unsplash.com/photo-1622445275463-afa2ab738c34"
+        "image": "/static/images/sarees/saree3.webp"
     },
 
     {
         "id": 16,
-        "name": "Silk Saree",
-        "price": 7999,
+        "name": "Printed Saree",
+        "price": 558,
         "category": "Sarees",
-        "image": "https://images.unsplash.com/photo-1618354691438-25bc04584c23"
+        "image": "/static/images/sarees/saree4.webp"
     },
 
+
+
+    # HALF SAREES
     {
         "id": 17,
-        "name": "Pink Half Saree",
-        "price": 4999,
+        "name": " Half Saree",
+        "price": 938,
         "category": "Half Sarees",
-        "image": "https://images.unsplash.com/photo-1597983073493-88cd35cf93b0"
+        "image": "/static/images/halfsarees/halfsaree1.webp"
     },
 
     {
         "id": 18,
-        "name": "Blue Half Saree",
-        "price": 5299,
+        "name": "Half Saree",
+        "price": 884,
         "category": "Half Sarees",
-        "image": "https://images.unsplash.com/photo-1610030469983-98e550d6193c"
+        "image": "/static/images/halfsarees/halfsaree2.webp"
     },
 
     {
         "id": 19,
-        "name": "Traditional Half Saree",
-        "price": 6499,
+        "name": "Designer Half Saree",
+        "price": 380,
         "category": "Half Sarees",
-        "image": "https://images.unsplash.com/photo-1622445275463-afa2ab738c34"
+        "image": "/static/images/halfsarees/halfsaree3.webp"
     },
 
     {
         "id": 20,
-        "name": "Designer Half Saree",
-        "price": 8999,
+        "name": "Half Saree",
+        "price": 1125,
         "category": "Half Sarees",
-        "image": "https://images.unsplash.com/photo-1618354691438-25bc04584c23"
+        "image": "/static/images/halfsarees/halfsaree4.webp"
     }
 
 ]
@@ -172,40 +185,58 @@ cart = []
 wishlist = []
 buy_items = []
 
-@app.route('/')
-def home():
-
-    user = session.get("mobile")
-
-    return render_template(
-        'index.html',
-        products=products,
-        user=user
-    )
-
-# ---------------- LOGIN ----------------
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 
     if request.method == 'POST':
 
         mobile = request.form['mobile']
+        password = request.form['password']
 
-        session['mobile'] = mobile
+        if password == "ajith@123":
 
-        return redirect('/')
+            session['mobile'] = mobile
+
+            return redirect('/')
 
     return render_template('login.html')
-
-# ---------------- LOGOUT ----------------
 
 @app.route('/logout')
 def logout():
 
     session.pop('mobile', None)
 
-    return redirect('/')
+    return redirect('/login')
+
+@app.route('/')
+def home():
+
+    if 'mobile' not in session:
+
+        return redirect('/login')
+
+    return render_template(
+        'index.html',
+        user=session['mobile']
+    )
+
+@app.route('/category/<category>')
+def category(category):
+
+    filtered = []
+
+    for p in products:
+
+        if p["category"] == category:
+
+            filtered.append(p)
+
+    return render_template(
+        'category.html',
+        products=filtered,
+        category=category,
+        user=session['mobile']
+    )
 
 @app.route('/add-to-cart/<int:pid>')
 def add_to_cart(pid):
@@ -227,7 +258,7 @@ def add_to_wishlist(pid):
 
             wishlist.append(p)
 
-    return redirect('/wishlist')
+    return redirect('/wishlist-page')
 
 @app.route('/buy/<int:pid>')
 def buy_product(pid):
@@ -252,7 +283,7 @@ def cart_page():
         title="Cart"
     )
 
-@app.route('/wishlist')
+@app.route('/wishlist-page')
 def wishlist_page():
 
     total = sum(item["price"] for item in wishlist)

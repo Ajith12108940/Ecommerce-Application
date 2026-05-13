@@ -3,7 +3,7 @@
 
 <head>
 
-    <title>Login</title>
+    <title>Flipkart Login</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
@@ -12,24 +12,42 @@
 
 <body>
 
-<div class="login-box">
+<div class="login-container">
 
-    <h1>Flipkart Login</h1>
+    <div class="login-left">
 
-    <form method="POST">
+        <h1>Login</h1>
 
-        <input type="text"
-               name="mobile"
-               placeholder="Enter Mobile Number"
-               required>
+        <p>
+            Get access to your Orders,
+            Wishlist and Recommendations
+        </p>
 
-        <button type="submit">
+    </div>
 
-            Login
+    <div class="login-right">
 
-        </button>
+        <form method="POST">
 
-    </form>
+            <input type="text"
+                   name="mobile"
+                   placeholder="Enter Mobile Number"
+                   required>
+
+            <input type="password"
+                   name="password"
+                   placeholder="Enter Password"
+                   required>
+
+            <button type="submit">
+
+                Login
+
+            </button>
+
+        </form>
+
+    </div>
 
 </div>
 

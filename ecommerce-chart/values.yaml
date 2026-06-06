@@ -1,0 +1,16 @@
+replicaCount: 1
+
+image:
+  repository: dalalappagariajithkumar/ecommerce-app
+  tag: v2
+  pullPolicy: Always
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 3000
+
+resources: {}
+
+autoscaling:
+  enabled: false

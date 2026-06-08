@@ -1,0 +1,18 @@
+services:
+
+  ecommerce-app:
+    image: ecommerce-app:latest
+
+    container_name: ecommerce-container
+
+    ports:
+      - "5050:3000"
+
+    restart: always
+
+    networks:
+      - ecommerce-network
+
+networks:
+  ecommerce-network:
+    driver: bridge
